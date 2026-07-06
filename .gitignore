@@ -1,0 +1,16 @@
+# Global
+**/.DS_Store
+**/.vscode
+**/npm-debug.log
+
+# Eclipse Files
+.buildpath
+.project
+.settings/
+
+# Build Tools
+build/node_modules/
+site/
+dist/
+build/gulpfile.js/config.json
+
