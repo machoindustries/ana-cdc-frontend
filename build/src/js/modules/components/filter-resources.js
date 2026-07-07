@@ -62,8 +62,11 @@ $(document).ready(function () {
     xhttp.send();
   }
   if (filterAccordion != null){
-    document.querySelector('.filter-content').classList.remove('hide');
-    document.querySelector('.category-icon').classList.add('flip-icon');
+    // Fix: querySelector only unhides the FIRST filter set (e.g. Topics),
+    // leaving Type/Source hidden by default. querySelectorAll ensures every
+    // top-level filter category is expanded on load.
+    document.querySelectorAll('.filter-content').forEach((content) => content.classList.remove('hide'));
+    document.querySelectorAll('.category-icon').forEach((icon) => icon.classList.add('flip-icon'));
     //hide or display subtopics on click
     document.querySelectorAll('.filter-label-sub').forEach((label) => {
       label.onclick = function() {
@@ -154,6 +157,17 @@ $(document).ready(function () {
         event.preventDefault();
       }
     });
+    // Fix: the desktop search input lives inside a <form> with no action/method.
+    // Pressing Enter triggers the browser's native implicit form submission
+    // regardless of preventDefault() on keydown/keyup, causing a full page
+    // reload instead of an AJAX search. Binding directly to 'submit' reliably
+    // stops that native behavior.
+    const searchFormDesktop = searchTextDesktop.closest('form');
+    if (searchFormDesktop) {
+      searchFormDesktop.addEventListener('submit', function(event) {
+        event.preventDefault();
+      });
+    }
     //Desktop Search Box - Icon Click event listener
     searchIconDesktop.addEventListener('mousedown', function(event) {
       switch (event.which) {
